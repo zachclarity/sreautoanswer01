@@ -1,8 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from datetime import datetime
-import requests
 from urllib.parse import urlparse
-import os
+from datetime import datetime
 import logging
 
 class handler(BaseHTTPRequestHandler):
@@ -16,9 +14,7 @@ class handler(BaseHTTPRequestHandler):
     self.send_response(200)
     self.send_header("Content-type", "text/html")
     self.end_headers()
-    print(post_data)
-    url = os.environ.get('brainsurl')
-    r = requests.post(url, data = str(post_data))
+    print(str(post_data))
     self.wfile.write(bytes(str(post_data), "utf-8"))
 
     #self.wfile.write("POST request for {}".format(post_data).encode('utf-8'))
@@ -27,10 +23,9 @@ class handler(BaseHTTPRequestHandler):
     self.send_response(200)
     self.send_header('Content-type', 'text/plain')
     self.end_headers()
-    answer = "auto answer v0.1 Beta "
     pathparsed = urlparse(self.path)
-    url = os.environ.get('brainsurl')
-    r = requests.post(url, data = str(pathparsed))
+    answer = "auto answer v0.1 Beta " + str(pathparsed.query)
+    print(answer)
     self.wfile.write("Works: {}:".format(answer).encode('utf-8'))
     return
 
