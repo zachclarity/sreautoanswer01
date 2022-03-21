@@ -5,12 +5,18 @@ import logging
 class handler(BaseHTTPRequestHandler):
   def do_POST(self):
     content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
+    if content_length > 150:
+        content_length = 150
     post_data = self.rfile.read(content_length) # <--- Gets the data itself
     #logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n",
     #    str(self.path), str(self.headers), post_data.decode('utf-8'))
+    self.send_response(200)
+    self.send_header("Content-type", "text/html")
+    self.end_headers()
+    print(post_data)
+    self.wfile.write(bytes(str(post_data), "utf-8"))
 
-    self._set_response()
-    self.wfile.write("POST request for {}".format(post_data).encode('utf-8'))
+    #self.wfile.write("POST request for {}".format(post_data).encode('utf-8'))
  
   def do_GET(self):
     self.send_response(200)
